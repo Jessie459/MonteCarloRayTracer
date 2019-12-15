@@ -41,10 +41,10 @@ vec3 color(const ray& r, hittable* scene, hittable* light_shape, int depth) {
 				return srec.attenuation * color(srec.specular_ray, scene, light_shape, depth + 1);
 			}
 			else {
-				pdf* plight = new hittable_pdf(light_shape, hrec.p);
-				pdf* p = new mixture_pdf(plight, srec.pdf_ptr);
-				ray scattered = ray(hrec.p, p->generate(), r.time());
-				float pdf_val = p->value(scattered.direction());
+				hittable_pdf plight(light_shape, hrec.p);
+				mixture_pdf p(&plight, srec.pdf_ptr);
+				ray scattered = ray(hrec.p, p.generate(), r.time());
+				float pdf_val = p.value(scattered.direction());
 				delete srec.pdf_ptr;
 				return emitted
 					+ srec.attenuation * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
@@ -94,17 +94,17 @@ void cornell_box(hittable** scene) {
 
 	hittable** list = new hittable* [10];
 	int i = 0;
-	//hittable* sphere = import_model("resources/sphere.obj", glass);
-	//hittable* cylinder = import_model("resources/cylinder.obj", met);
-	//list[i++] = new translate(sphere, vec3(200, 100, 200));
-	//list[i++] = new translate(cylinder, vec3(400, 0, 380));
+	hittable* sphere = import_model("resources/sphere.obj", glass);
+	hittable* cylinder = import_model("resources/cylinder.obj", met);
+	list[i++] = new translate(sphere, vec3(200, 100, 200));
+	list[i++] = new translate(cylinder, vec3(400, 0, 380));
 	list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
 	list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
 	list[i++] = new flip_normals(new xz_rect(213, 343, 227, 332, 554, light));
 	list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
 	list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
 	list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
-	list[i++] = new translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), met), 15), vec3(265, 0, 295));
+	//list[i++] = new translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), met), 15), vec3(265, 0, 295));
 	*scene = new hittable_list(list, i);
 }
 
@@ -158,6 +158,9 @@ int main() {
 	cout << "width: " << nx << endl;
 	cout << "height: " << ny << endl;
 	cout << "samples per pixel: " << ns << endl;
-	cout << "running time: " << (end - start) / (double)CLOCKS_PER_SEC << "s" << endl;
+	long running_time = (end - start) / CLOCKS_PER_SEC;
+	long minute = running_time / 60;
+	long second = running_time % 60;	
+	cout << "running time: " << minute << "m " << second << "s" << endl;
 	return 0;
 }

@@ -46,4 +46,3 @@ E:\MonteCarloRayTracer\MonteCarloRayTracer\src\main.cpp(87,75): warning C4305: �
 E:\MonteCarloRayTracer\MonteCarloRayTracer\src\main.cpp(88,77): warning C4305: “参数”: 从“double”到“float”截断
 E:\MonteCarloRayTracer\MonteCarloRayTracer\src\main.cpp(89,77): warning C4305: “参数”: 从“double”到“float”截断
 E:\MonteCarloRayTracer\MonteCarloRayTracer\src\main.cpp(92,46): warning C4305: “参数”: 从“double”到“float”截断
-  MonteCarloRayTracer.vcxproj -> E:\MonteCarloRayTracer\Debug\MonteCarloRayTracer.exe
